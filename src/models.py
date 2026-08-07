@@ -11,24 +11,9 @@ from pydantic import BaseModel, Field
 # ==========================================================
 
 
-class CandidateDocument(BaseModel):
+class Document(BaseModel):
     """
-    Represents an extracted CV document before parsing.
-    """
-
-    filename: str
-    path: Path
-    extension: str
-
-    raw_text: str
-
-    page_count: int = 0
-    character_count: int = 0
-
-
-class JobDescriptionDocument(BaseModel):
-    """
-    Represents an extracted Job Description before parsing.
+    Base class for all extracted documents    
     """
 
     filename: str
@@ -37,8 +22,22 @@ class JobDescriptionDocument(BaseModel):
 
     raw_text: str
 
-    page_count: int = 0
-    character_count: int = 0
+    page_count: int | None = None
+    character_count: int
+
+
+class CandidateDocument(Document):
+    """
+    Raw resume extracted from a file.
+    """
+    pass
+
+
+class JobDescriptionDocument(Document):
+    """
+    Raw job description extracted from a file.
+    """
+    pass
 
 
 # ============================================================================
