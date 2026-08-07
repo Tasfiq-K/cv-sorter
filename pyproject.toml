@@ -1,0 +1,17 @@
+[project]
+name = "cv-sorter"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "loguru>=0.7.3",
+    "pandas>=3.0.5",
+    "pdfplumber>=0.11.10",
+    "pydantic>=2.13.4",
+    "pymupdf>=1.28.0",
+    "python-docx>=1.2.0",
+    "pyyaml>=6.0.3",
+    "rich>=15.0.0",
+    "typer>=0.27.0",
+]
