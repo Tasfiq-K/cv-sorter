@@ -21,20 +21,45 @@ def clean_text(text: str) -> str:
 
 
 def normalize_unicode(text: str) -> str:
-    pass           
+    """
+    Normalize Unicode characters
+    """
 
+    return unicodedata.normalize("NFKC", text)
 
 def normalize_line_endings(text: str) -> str:
-    pass
+    """
+    Convert windows/mac line to unix.
+    """
+
+    return text.replace("\r\n", "\n").replace("\r", "\n")
 
 
 def remove_trailing_whitespace(text: str) -> str:
-    pass
+    """
+    Remove trailing space from every line
+    """
+
+    lines = [line.strip() for line in text.split("\n")]
+
+    return "\n".join(lines)
 
 
 def collapse_multiple_spaces(text: str) -> str:
-    pass
+    """
+    Replace consecutive spaces/tabs with a single space.
+    Does not affect newlines.
+    """
+
+    return re.sub(r"[ \t]+", " ", text)
 
 
-def collapse_blank_lines(text: str) -> str:
-    pass
+def collapse_blank_lines(text: str, max_blank_lines: int = 1) -> str:
+    """
+    Reduce multiple blank lines
+    """
+
+    pattern = r"\n{" + str(max_blank_lines + 2) + r",}"
+    replacement = "\n" * (max_blank_lines + 1)
+
+    return re.sub(pattern, replacement, text)
