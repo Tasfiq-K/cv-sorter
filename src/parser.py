@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from src.llm.base import LLMExtractor
+from src.llm.base import BaseLLM
 
 from src.models import (
     Document,
@@ -23,7 +23,7 @@ class Parser:
         3. Return validated models
     """
 
-    def __init__(self, llm: LLMExtractor):
+    def __init__(self, llm: BaseLLM):
         self.llm = llm
 
 
