@@ -36,7 +36,9 @@ class GroqLLM(BaseLLM):
         self.client = Groq(api_key=self.api_key)
 
         self.prompt_manager = (
-            prompt_manager or PromptManager()
+            prompt_manager
+            if prompt_manager is not None
+            else PromptManager()
         )
 
 
@@ -48,6 +50,22 @@ class GroqLLM(BaseLLM):
     ) -> BaseModel:
         """
         Extract structured information from a document.
+
+        Parameters
+        ----------
+        document:
+            Preprocessed document containing raw text.
+
+        output_model:
+            Pydantic model describing the expected output.
+
+        prompt_name:
+            Name of the prompt template without the .md extension.
+
+        Returns
+        -------
+        BaseModel
+            Validated instance of output_model.
         """
 
         prompt = self.prompt_manager.render(
@@ -65,7 +83,11 @@ class GroqLLM(BaseLLM):
                 {
                     "role": "system",
                     "content": prompt,
-                }
+                },
+                {
+                    "role": "user",
+                    "content": document.raw_text,
+                },
             ],
 
             response_format={
@@ -87,9 +109,20 @@ class GroqLLM(BaseLLM):
                 "Groq returned an empty response."
             )
 
-        data = json.loads(content)
+        try: 
+            data = json.loads(content)
+        except json.JSONDecodeError as exc:
+            raise ValueError(
+                "Groq returned invalid JSON."
+            ) from exc
 
-        return output_model.model_validate(data)
+        try:
+            return output_model.model_validate(data)
+        except Exception as exc:
+            raise ValueError(
+                f"Groq response failed Pydantic validation "
+                f"for {output_model.__name__}."
+            ) from exc
 
 
     @staticmethod
