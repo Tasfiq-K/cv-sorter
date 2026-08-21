@@ -95,7 +95,7 @@ class ExperienceEntry(BaseModel):
     start_date_raw: str | None 
     end_date_raw: str | None 
     currently_working: bool | None 
-    technologies: list[str] = Field(default_factory=list)
+    technologies: list[str] 
     description: str | None 
 
 
@@ -108,7 +108,7 @@ class ProjectEntry(BaseModel):
 
     title: str | None 
     description: str | None 
-    technologies: list[str] = Field(default_factory=list)
+    technologies: list[str] 
     github: str | None 
     demo: str | None 
 
@@ -163,13 +163,13 @@ class CandidateProfile(BaseModel):
     name: str | None 
     headline: str | None 
     summary: str | None 
-    contact: ContactInfo = Field(default_factory=ContactInfo)
-    skills: list[SkillEntry] = Field(default_factory=list)
-    education: list[EducationEntry] = Field(default_factory=list)
-    experience: list[ExperienceEntry] = Field(default_factory=list)
-    projects: list[ProjectEntry] = Field(default_factory=list)
-    certifications: list[CertificationEntry] = Field(default_factory=list)
-    languages: list[LanguageEntry] = Field(default_factory=list)
+    contact: ContactInfo 
+    skills: list[SkillEntry] 
+    education: list[EducationEntry]  
+    experience: list[ExperienceEntry]
+    projects: list[ProjectEntry] 
+    certifications: list[CertificationEntry] 
+    languages: list[LanguageEntry]
     raw_text: str
 
 
@@ -188,13 +188,13 @@ class JobDescription(BaseModel):
     location: str | None 
     employment_type: str | None 
     summary: str | None 
-    responsibilities: list[str] = Field(default_factory=list)
-    required_skills: list[str] = Field(default_factory=list)
-    preferred_skills: list[str] = Field(default_factory=list)
-    required_education: list[str] = Field(default_factory=list)
-    preferred_education: list[str] = Field(default_factory=list)
-    required_certifications: list[str] = Field(default_factory=list)
-    preferred_certifications: list[str] = Field(default_factory=list)
+    responsibilities: list[str] 
+    required_skills: list[str] 
+    preferred_skills: list[str] 
+    required_education: list[str] 
+    preferred_education: list[str] 
+    required_certifications: list[str] 
+    preferred_certifications: list[str] 
     experience_requirement: str | None 
     raw_text: str
 
@@ -218,7 +218,7 @@ class CandidateFeatures(BaseModel):
     project_count: int = 0
     certification_count: int = 0
     highest_degree: str | None 
-    normalized_skills: list[str] = Field(default_factory=list)
+    normalized_skills: list[str] 
 
 
 # ============================================================================
@@ -243,6 +243,6 @@ class RankedCandidate(BaseModel):
     profile: CandidateProfile
     features: CandidateFeatures
     score: ScoreBreakdown
-    matched_skills: list[str] = Field(default_factory=list)
-    missing_skills: list[str] = Field(default_factory=list)
-    strengths: list[str] = Field(default_factory=list)
+    matched_skills: list[str]
+    missing_skills: list[str]
+    strengths: list[str]
