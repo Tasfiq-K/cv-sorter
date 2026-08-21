@@ -22,7 +22,7 @@ class Document(BaseModel):
 
     raw_text: str
 
-    page_count: int | None = None
+    page_count: int | None 
     character_count: int
 
 
@@ -47,12 +47,12 @@ class JobDescriptionDocument(Document):
 
 class ContactInfo(BaseModel):
 
-    email: str | None = None
-    phone: str | None = None
-    location: str | None = None
-    linkedin: str | None = None
-    github: str | None = None
-    portfolio: str | None = None
+    email: str | None 
+    phone: str | None 
+    location: str | None 
+    linkedin: str | None 
+    github: str | None 
+    portfolio: str | None 
 
 
 # ============================================================================
@@ -67,13 +67,13 @@ class EducationEntry(BaseModel):
     No normalization happens here.
     """
 
-    institution: str | None = None
-    degree: str | None = None
-    field_of_study: str | None = None
-    grade: str | None = None
-    start_date_raw: str | None = None
-    end_date_raw: str | None = None
-    description: str | None = None
+    institution: str | None 
+    degree: str | None 
+    field_of_study: str | None 
+    grade: str | None 
+    start_date_raw: str | None 
+    end_date_raw: str | None 
+    description: str | None 
 
 
 # ============================================================================
@@ -88,15 +88,15 @@ class ExperienceEntry(BaseModel):
     Dates remain exactly as written in the CV.
     """
 
-    company: str | None = None
-    role: str | None = None
-    employment_type: str | None = None
-    location: str | None = None
-    start_date_raw: str | None = None
-    end_date_raw: str | None = None
-    currently_working: bool | None = None
+    company: str | None 
+    role: str | None 
+    employment_type: str | None 
+    location: str | None 
+    start_date_raw: str | None 
+    end_date_raw: str | None 
+    currently_working: bool | None 
     technologies: list[str] = Field(default_factory=list)
-    description: str | None = None
+    description: str | None 
 
 
 # ============================================================================
@@ -106,11 +106,11 @@ class ExperienceEntry(BaseModel):
 
 class ProjectEntry(BaseModel):
 
-    title: str | None = None
-    description: str | None = None
+    title: str | None 
+    description: str | None 
     technologies: list[str] = Field(default_factory=list)
-    github: str | None = None
-    demo: str | None = None
+    github: str | None 
+    demo: str | None 
 
 
 # ============================================================================
@@ -120,9 +120,9 @@ class ProjectEntry(BaseModel):
 
 class CertificationEntry(BaseModel):
 
-    name: str | None = None
-    issuer: str | None = None
-    issue_date_raw: str | None = None
+    name: str | None 
+    issuer: str | None 
+    issue_date_raw: str | None 
 
 
 # ============================================================================
@@ -133,7 +133,7 @@ class CertificationEntry(BaseModel):
 class SkillEntry(BaseModel):
 
     name: str
-    category: str | None = None
+    category: str | None 
 
 
 # ============================================================================
@@ -144,7 +144,7 @@ class SkillEntry(BaseModel):
 class LanguageEntry(BaseModel):
 
     name: str
-    proficiency: str | None = None
+    proficiency: str | None 
 
 
 # ============================================================================
@@ -160,9 +160,9 @@ class CandidateProfile(BaseModel):
     No derived information belongs here.
     """
 
-    name: str | None = None
-    headline: str | None = None
-    summary: str | None = None
+    name: str | None 
+    headline: str | None 
+    summary: str | None 
     contact: ContactInfo = Field(default_factory=ContactInfo)
     skills: list[SkillEntry] = Field(default_factory=list)
     education: list[EducationEntry] = Field(default_factory=list)
@@ -183,11 +183,11 @@ class JobDescription(BaseModel):
     Structured Job Description returned by the LLM.
     """
 
-    title: str | None = None
-    company: str | None = None
-    location: str | None = None
-    employment_type: str | None = None
-    summary: str | None = None
+    title: str | None 
+    company: str | None 
+    location: str | None 
+    employment_type: str | None 
+    summary: str | None 
     responsibilities: list[str] = Field(default_factory=list)
     required_skills: list[str] = Field(default_factory=list)
     preferred_skills: list[str] = Field(default_factory=list)
@@ -195,7 +195,7 @@ class JobDescription(BaseModel):
     preferred_education: list[str] = Field(default_factory=list)
     required_certifications: list[str] = Field(default_factory=list)
     preferred_certifications: list[str] = Field(default_factory=list)
-    experience_requirement: str | None = None
+    experience_requirement: str | None 
     raw_text: str
 
 
@@ -217,7 +217,7 @@ class CandidateFeatures(BaseModel):
     internship_count: int = 0
     project_count: int = 0
     certification_count: int = 0
-    highest_degree: str | None = None
+    highest_degree: str | None 
     normalized_skills: list[str] = Field(default_factory=list)
 
 
