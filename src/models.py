@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 
 
 # ==========================================================
@@ -46,6 +46,7 @@ class JobDescriptionDocument(Document):
 
 
 class ContactInfo(BaseModel):
+    model_config = ConfigDict(extra="forbid")
 
     email: str | None 
     phone: str | None 
@@ -66,6 +67,7 @@ class EducationEntry(BaseModel):
 
     No normalization happens here.
     """
+    model_config = ConfigDict(extra="forbid")
 
     institution: str | None 
     degree: str | None 
@@ -87,6 +89,7 @@ class ExperienceEntry(BaseModel):
 
     Dates remain exactly as written in the CV.
     """
+    model_config = ConfigDict(extra="forbid")
 
     company: str | None 
     role: str | None 
@@ -106,6 +109,8 @@ class ExperienceEntry(BaseModel):
 
 class ProjectEntry(BaseModel):
 
+    model_config = ConfigDict(extra="forbid")
+
     title: str | None 
     description: str | None 
     technologies: list[str] 
@@ -120,6 +125,8 @@ class ProjectEntry(BaseModel):
 
 class CertificationEntry(BaseModel):
 
+    model_config = ConfigDict(extra="forbid")
+
     name: str | None 
     issuer: str | None 
     issue_date_raw: str | None 
@@ -132,6 +139,8 @@ class CertificationEntry(BaseModel):
 
 class SkillEntry(BaseModel):
 
+    model_config = ConfigDict(extra="forbid")
+
     name: str
     category: str | None 
 
@@ -142,6 +151,8 @@ class SkillEntry(BaseModel):
 
 
 class LanguageEntry(BaseModel):
+
+    model_config = ConfigDict(extra="forbid")
 
     name: str
     proficiency: str | None 
@@ -159,6 +170,7 @@ class CandidateProfile(BaseModel):
     This model intentionally stores extracted facts only.
     No derived information belongs here.
     """
+    model_config = ConfigDict(extra="forbid")
 
     name: str | None 
     headline: str | None 
@@ -182,6 +194,7 @@ class JobDescription(BaseModel):
     """
     Structured Job Description returned by the LLM.
     """
+    model_config = ConfigDict(extra="forbid")
 
     title: str | None 
     company: str | None 
