@@ -108,18 +108,26 @@ def _extract_pdf(path: Path) -> str:
     pages: list[str] = []
 
     with pdfplumber.open(path) as pdf:
+        page_count = len(pdf.pages)
+
         for page in pdf.pages:
-            text = page.extract_text()
+            text = page.extract_text(
+                x_tolerance=2,
+                y_tolerance=3
+            )
 
             if text:
                 pages.append(text)
+
+    raw_text = "\n\n".join(pages).strip()
+
     return CandidateDocument(
         filename=path.name,
         path=path,
         extension=path.suffix.lower(),
-        raw_text="\n\n".join(pages).strip(),
-        page_count=len(pdf.pages),
-        character_count=len(text),
+        raw_text=raw_text,
+        page_count=page_count,
+        character_count=len(raw_text),
     )
 
 def _extract_docx(path: Path) -> str:
@@ -156,10 +164,27 @@ def _extract_txt(path: Path) -> str:
         character_count=len(text)
     )
 
+# def _test_pdf_tolerance(path: Path) -> None:
+#     with pdfplumber.open(path) as pdf:
+#         for tolerance in [0.5, 1, 1.5, 2, 3, 4, 5]:
+
+#             print("\n" + "=" * 80)
+#             print(f"x_tolerance = {tolerance}")
+#             print("=" * 80)
+
+#             text = pdf.pages[0].extract_text(
+#                 x_tolerance=tolerance,
+#                 y_tolerance=3,
+#             )
+
+#             print(text[:3000] if text else "[NO TEXT]")
+
 
 if __name__ == "__main__":
     from pprint import pprint
     file_path = "data/cvs/Md Tasfiq Kamran.pdf"
     text = extract_text(file_path)
+    # file_path = Path("data/cvs/Md Tasfiq Kamran.pdf")
+    # _test_pdf_tolerance(file_path)
 
     pprint(text)
