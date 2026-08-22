@@ -3,11 +3,12 @@ from __future__ import annotations
 from src.llm.base import BaseLLM
 
 from src.models import (
-    Document,
     CandidateDocument,
     CandidateProfile,
+    CandidateProfileLLM,
+    Document,
     JobDescription,
-    JobDescriptionDocument
+    JobDescriptionDocument,
 )
 
 from src.parsers.preprocess import clean_text
@@ -43,13 +44,22 @@ class Parser:
 
     
     def parse_resume(
-            self, 
-            document: CandidateDocument,
+        self,
+        document: CandidateDocument,
     ) -> CandidateProfile:
 
-        doc = self._prepare(document)
+        document = self._prepare(document)
 
-        return self.llm.parse_resume(doc)
+        extracted = self.llm.extract(
+            document=document,
+            output_model=CandidateProfileLLM,
+            prompt_name="cv_parser",
+        )
+
+        return CandidateProfile(
+            **extracted.model_dump(),
+            raw_text=document.raw_text,
+        )
 
 
     def parse_jd(
@@ -59,4 +69,8 @@ class Parser:
 
         doc = self._prepare(document)
 
-        return self.llm.parse_jd(doc)
+        return self.llm.extract(
+            document=document,
+            output_model=JobDescription,
+            prompt_name="jd_parser",
+        )
