@@ -63,3 +63,28 @@ def collapse_blank_lines(text: str, max_blank_lines: int = 1) -> str:
     replacement = "\n" * (max_blank_lines + 1)
 
     return re.sub(pattern, replacement, text)
+
+
+if __name__ == "__main__":
+    from pathlib import Path
+
+    from src.extractor import extract_text
+
+    cv_path = Path("data/cvs/Md Tasfiq Kamran.pdf")
+
+    document = extract_text(cv_path)
+
+    print("=" * 70)
+    print("RAW TEXT")
+    print("=" * 70)
+    print(document.raw_text)
+
+    print()
+    print("=" * 70)
+    print("PREPROCESSED TEXT")
+    print("=" * 70)
+
+    cleaned_text = clean_text(document.raw_text)
+
+    print(cleaned_text)
+    print("=" * 70)
