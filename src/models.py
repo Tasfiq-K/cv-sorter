@@ -165,25 +165,48 @@ class LanguageEntry(BaseModel):
 
 class CandidateProfile(BaseModel):
     """
-    Structured resume returned by the LLM.
-
-    This model intentionally stores extracted facts only.
-    No derived information belongs here.
+    Complete parsed candidate profile used internally by the application.
     """
+
     model_config = ConfigDict(extra="forbid")
 
-    name: str | None 
-    headline: str | None 
-    summary: str | None 
-    contact: ContactInfo 
-    skills: list[SkillEntry] 
-    education: list[EducationEntry]  
+    name: str | None
+    headline: str | None
+    summary: str | None
+
+    contact: ContactInfo
+
+    skills: list[SkillEntry]
+    education: list[EducationEntry]
     experience: list[ExperienceEntry]
-    projects: list[ProjectEntry] 
-    certifications: list[CertificationEntry] 
+    projects: list[ProjectEntry]
+    certifications: list[CertificationEntry]
     languages: list[LanguageEntry]
+
     raw_text: str
 
+
+class CandidateProfileLLM(BaseModel):
+    """
+    Structured information extracted directly by the LLM.
+
+    This model is used exclusively as the Groq structured-output schema.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    name: str | None
+    headline: str | None
+    summary: str | None
+
+    contact: ContactInfo
+
+    skills: list[SkillEntry]
+    education: list[EducationEntry]
+    experience: list[ExperienceEntry]
+    projects: list[ProjectEntry]
+    certifications: list[CertificationEntry]
+    languages: list[LanguageEntry]
 
 # ============================================================================
 # Parsed Job Description
