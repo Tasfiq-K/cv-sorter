@@ -78,31 +78,31 @@ class GroqLLM(BaseLLM):
 
         response = self.client.chat.completions.create(
             model=self.model,
-
             messages=[
                 {
-                    "role": "system",
-                    "content": prompt,
-                },
-                {
                     "role": "user",
-                    "content": document.raw_text,
-                },
+                    "content": (
+                        f"{prompt}\n\n"
+                        "Here is the resume to extract:\n\n"
+                        f"{document.raw_text}"
+                    ),
+                }
             ],
-
             response_format={
                 "type": "json_schema",
                 "json_schema": {
                     "name": self._schema_name(output_model),
                     "strict": True,
-                    "schema": schema
+                    "schema": schema,
                 },
             },
-
-            temperature=0
+            reasoning_effort="low",
+            max_completion_tokens=4096,
         )
 
         content = response.choices[0].message.content
+        # print("*" * 70)
+        # print(content)
 
         if not content:
             raise ValueError(
