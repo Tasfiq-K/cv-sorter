@@ -8,6 +8,7 @@ from src.models import (
     CandidateProfileLLM,
     Document,
     JobDescription,
+    JobDescriptionLLM,
     JobDescriptionDocument,
 )
 
@@ -67,10 +68,15 @@ class Parser:
             document: JobDescriptionDocument
     ) -> JobDescription:
 
-        doc = self._prepare(document)
+        document = self._prepare(document)
 
-        return self.llm.extract(
+        extracted = self.llm.extract(
             document=document,
-            output_model=JobDescription,
-            prompt_name="jd_parser",
+            output_model=JobDescriptionLLM,
+            promt_name="jd_parser"
+        )
+
+        return JobDescription(
+            **extracted.model_dump(),
+            raw_text=document.raw_text,
         )
