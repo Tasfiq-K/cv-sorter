@@ -73,7 +73,7 @@ class Parser:
         extracted = self.llm.extract(
             document=document,
             output_model=JobDescriptionLLM,
-            promt_name="jd_parser"
+            prompt_name="jd_parser"
         )
 
         return JobDescription(
