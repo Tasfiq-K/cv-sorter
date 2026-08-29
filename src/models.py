@@ -345,6 +345,53 @@ class CandidateFeatures(BaseModel):
     highest_degree: str | None 
     normalized_skills: list[str] 
 
+# ==========================================================
+# Position / Evaluation Models
+# ==========================================================
+
+class EvaluationDimension(BaseModel):
+    """
+    A dimension used when evaluating a candidate for a
+    particular position.
+
+    This is application-level evaluation strategy.
+    It is NOT extracted from the job description.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    name: str
+
+    weight: float = Field(
+        ge=0.0,
+        le=1.0
+    )
+
+    description: str | None
+
+
+class PositionProfile(BaseModel):
+    """
+    Defines how candidates should be evaluated for a
+    particular type of position.
+
+    Examples:
+        machine_learning_intern
+        machine_learning_engineer
+        data_scientist
+        software_engineer
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    name: str
+
+    description: str
+
+    evaluation_dimensions: list[EvaluationDimension] = Field(
+        default_factory=list
+    )
+
 
 # ============================================================================
 # Scoring
