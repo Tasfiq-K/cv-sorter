@@ -4,10 +4,10 @@ from pathlib import Path
 
 import pdfplumber
 from docx import Document
-from . models import CandidateDocument
+from . models import Document
 
 
-SUPPORTED_EXTENSIONS = {".pdf", ".docx", ".txt"}
+SUPPORTED_EXTENSIONS = {".pdf", ".docx", ".txt", ".md"}
 
 
 class UnsupportedFileTypeError(Exception):
@@ -22,6 +22,7 @@ def extract_text(file_path: str | Path) -> str:
         - PDF
         - DOCX
         - TXT
+        - Markdown
 
     Parameters
     ----------
@@ -30,8 +31,8 @@ def extract_text(file_path: str | Path) -> str:
 
     Returns
     -------
-    str
-        Extracted text.
+    Document
+        Generic extracted document containing text and metadata
 
     Raises
     ------
@@ -55,8 +56,8 @@ def extract_text(file_path: str | Path) -> str:
     if extension == ".docx":
         return _extract_docx(path)
 
-    if extension == ".txt":
-        return _extract_txt(path)
+    if extension in {".txt", ".md"}:
+        return _extract_text_file(path)
 
     raise UnsupportedFileTypeError(
         f"Unsupported file type '{extension}'. "
@@ -64,18 +65,14 @@ def extract_text(file_path: str | Path) -> str:
     )
 
 
-def extract_directory(folder: str | Path) -> dict[str, str]:
+def extract_directory(folder: str | Path) -> list[Document]:
     """
     Extract text from every supported document inside a directory.
 
     Returns
     -------
-    dict[str, str]
-
-        {
-            "john.pdf": "...text...",
-            "alice.docx": "...text..."
-        }
+    list[Document]
+        Successfully extracted documents
     """
 
     folder = Path(folder)
@@ -83,7 +80,7 @@ def extract_directory(folder: str | Path) -> dict[str, str]:
     if not folder.exists():
         raise FileNotFoundError(folder)
 
-    documents: list[CandidateDocument] = []
+    documents: list[Document] = []
 
     for file in sorted(folder.iterdir()):
         if file.suffix.lower() not in SUPPORTED_EXTENSIONS:
@@ -104,7 +101,7 @@ def extract_directory(folder: str | Path) -> dict[str, str]:
 # ---------------------------------------------------------------------
 
 
-def _extract_pdf(path: Path) -> str:
+def _extract_pdf(path: Path) -> Document:
     pages: list[str] = []
 
     with pdfplumber.open(path) as pdf:
@@ -121,7 +118,7 @@ def _extract_pdf(path: Path) -> str:
 
     raw_text = "\n\n".join(pages).strip()
 
-    return CandidateDocument(
+    return Document(
         filename=path.name,
         path=path,
         extension=path.suffix.lower(),
@@ -130,7 +127,7 @@ def _extract_pdf(path: Path) -> str:
         character_count=len(raw_text),
     )
 
-def _extract_docx(path: Path) -> str:
+def _extract_docx(path: Path) -> Document:
     doc = Document(path)
 
     paragraphs = [
@@ -141,7 +138,7 @@ def _extract_docx(path: Path) -> str:
 
     text = "\n".join(paragraphs)
 
-    return CandidateDocument(
+    return Document(
         filename=path.name,
         path=path,
         extension=path.suffix.lower(),
@@ -152,10 +149,16 @@ def _extract_docx(path: Path) -> str:
 
 
 
-def _extract_txt(path: Path) -> str:
-    text = path.read_text(...)
+def _extract_text_file(path: Path) -> Document:
+    """
+    Extract text from TXT or markdown files.
+    """
+    text = path.read_text(
+        encoding="utf-8",
+        errors="replace"
+    )
 
-    return CandidateDocument(
+    return Document(
         filename=path.name,
         path=path,
         extension=path.suffix.lower(),
@@ -183,8 +186,9 @@ def _extract_txt(path: Path) -> str:
 if __name__ == "__main__":
     from pprint import pprint
     file_path = "data/cvs/Md Tasfiq Kamran.pdf"
+    # file_path = "data/job_descriptions/jd.md"
     text = extract_text(file_path)
     # file_path = Path("data/cvs/Md Tasfiq Kamran.pdf")
     # _test_pdf_tolerance(file_path)
 
-    pprint(text)
+    pprint(text.raw_text)
