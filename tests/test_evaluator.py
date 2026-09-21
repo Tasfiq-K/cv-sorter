@@ -150,6 +150,7 @@ def make_evaluator() -> Evaluator:
 # Position / Weight Tests
 # ==========================================================
 
+evaluator = make_evaluator()
 
 def test_position_profile_loads():
     position = get_position_profile("machine_learning_intern")
@@ -159,7 +160,7 @@ def test_position_profile_loads():
 
 
 def test_position_weights_are_loaded():
-    evaluator = make_evaluator()
+    # evaluator = make_evaluator()
 
     assert evaluator._weights["required_skills"] == 0.25
     assert evaluator._weights["projects"] == 0.25
@@ -174,7 +175,7 @@ def test_position_weights_are_loaded():
 
 
 def test_required_skill_score():
-    evaluator = make_evaluator()
+    # evaluator = make_evaluator()
     job = make_job_description()
 
     matched_skills = ["Python"]
@@ -188,7 +189,7 @@ def test_required_skill_score():
 
 
 def test_preferred_skill_score():
-    evaluator = make_evaluator()
+    # evaluator = make_evaluator()
 
     candidate = make_candidate()
     job = make_job_description()
@@ -208,7 +209,7 @@ def test_preferred_skill_score():
 
 
 def test_experience_score_when_requirement_is_met():
-    evaluator = make_evaluator()
+    # evaluator = make_evaluator()
 
     candidate = make_candidate()
     job = make_job_description()
@@ -227,7 +228,7 @@ def test_experience_score_when_requirement_is_met():
 
 
 def test_education_score_when_no_requirement_exists():
-    evaluator = make_evaluator()
+    # evaluator = make_evaluator()
 
     candidate = make_candidate()
     job = make_job_description()
@@ -246,7 +247,7 @@ def test_education_score_when_no_requirement_exists():
 
 
 def test_project_score_when_candidate_has_projects():
-    evaluator = make_evaluator()
+    # evaluator = make_evaluator()
 
     candidate = make_candidate()
     job = make_job_description()
@@ -265,7 +266,7 @@ def test_project_score_when_candidate_has_projects():
 
 
 def test_certification_score_when_no_requirement_exists():
-    evaluator = make_evaluator()
+    # evaluator = make_evaluator()
 
     candidate = make_candidate()
     job = make_job_description()
@@ -284,7 +285,7 @@ def test_certification_score_when_no_requirement_exists():
 
 
 def test_final_score_is_weighted_sum():
-    evaluator = make_evaluator()
+    # evaluator = make_evaluator()
 
     score = evaluator._build_score_breakdown(
         required_skill_score=0.5,
@@ -293,6 +294,7 @@ def test_final_score_is_weighted_sum():
         education_score=1.0,
         project_score=1.0,
         certification_score=1.0,
+        semantic_score=0.0,
     )
 
     expected = (
@@ -314,7 +316,7 @@ def test_final_score_is_weighted_sum():
 
 
 def test_evaluate_returns_complete_result():
-    evaluator = make_evaluator()
+    # evaluator = make_evaluator()
 
     candidate = make_candidate()
     job = make_job_description()
@@ -350,7 +352,7 @@ def test_evaluate_returns_complete_result():
 
 
 def test_candidate_with_no_skills():
-    evaluator = make_evaluator()
+    # evaluator = make_evaluator()
 
     candidate = make_candidate()
     candidate.skills = []
@@ -368,7 +370,7 @@ def test_candidate_with_no_skills():
 
 
 def test_candidate_with_no_projects():
-    evaluator = make_evaluator()
+    # evaluator = make_evaluator()
 
     candidate = make_candidate()
     candidate.projects = []
