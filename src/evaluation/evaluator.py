@@ -11,7 +11,7 @@ from src.models import (
     ScoreBreakdown,
     RankedCandidate,
 )
-
+from .semantic import SemanticScorer
 
 class Evaluator:
     """
@@ -34,6 +34,8 @@ class Evaluator:
             dimension.name: dimension.weight
             for dimension in position.evaluation_dimensions
         }
+
+        self.semantic_scorer = SemanticScorer()
 
     # ==========================================================
     # Public API
@@ -82,6 +84,14 @@ class Evaluator:
             job_description,
         )
 
+        semantic_score = self.semantic_scorer.score(
+            candidate,
+            job_description,
+        )
+
+        # throw-away print statement
+        print(f"Semantic Score: {semantic_score}")
+
         score = self._build_score_breakdown(
             required_skill_score=required_skill_score,
             preferred_skill_score=preferred_skill_score,
@@ -89,6 +99,7 @@ class Evaluator:
             education_score=education_score,
             project_score=project_score,
             certification_score=certification_score,
+            semantic_score=semantic_score,
         )
 
         strengths = self._find_strengths(
@@ -402,6 +413,7 @@ class Evaluator:
         education_score: float,
         project_score: float,
         certification_score: float,
+        semantic_score: float,
     ) -> ScoreBreakdown:
 
         scores = {
@@ -436,7 +448,7 @@ class Evaluator:
             education_score=education_score,
             project_score=project_score,
             certification_score=certification_score,
-            semantic_score=0.0,
+            semantic_score=semantic_score,
             final_score=weighted_total,
         )
 
