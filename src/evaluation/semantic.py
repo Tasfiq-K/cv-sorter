@@ -67,30 +67,106 @@ class SemanticScorer:
             ),
         }
 
-        candidate_text = self._build_candidate(candidate)
-        job_text = self._build_job(job_description)
+        return self._weighted_average(components) # calculation happens elsewhere
+
+        # candidate_text = self._build_candidate(candidate)
+        # job_text = self._build_job(job_description)
+
+        # if not candidate_text or not job_text:
+        #     return 0.0
+
+        # candidate_embedding = self.model.encode(
+        #     candidate_text,
+        #     convert_to_tensor=True,
+        #     normalize_embeddings=True,
+        # )
+
+        # job_embedding = self.model.encode(
+        #     job_text,
+        #     convert_to_tensor=True,
+        #     normalize_embeddings=True,
+        # )
+
+        # similarity = util.cos_sim(
+        #     candidate_embedding,
+        #     job_embedding
+        # ).item()
+
+        # return max(0.0, min(1.0, (similarity + 1.0) / 2.0))
+    
+
+    def _score_pair(
+            self,
+            candidate_text: str,
+            job_text: str,
+    ) -> float | None:
+
+        """
+        Calculate Cosine Similarity between texts.
+
+        Args: 
+            candidate_text: Textual information from candidate.
+            job_text: Textual information from job description.
+
+        Returns: 
+            Similarity score between [0, 1]
+        """
 
         if not candidate_text or not job_text:
-            return 0.0
+            return None
 
-        candidate_embedding = self.model.encode(
-            candidate_text,
+
+        embeddings = self.model_encode(
+            [candidate_text, job_text],
             convert_to_tensor=True,
             normalize_embeddings=True,
         )
 
-        job_embedding = self.model.encode(
-            job_text,
-            convert_to_tensor=True,
-            normalize_embeddings=True,
-        )
+        # measure similarity
 
         similarity = util.cos_sim(
-            candidate_embedding,
-            job_embedding
+            embeddings[0],
+            embeddings[1]
         ).item()
 
-        return max(0.0, min(1.0, (similarity + 1.0) / 2.0))
+        return (0.0, min(1.0, similarity))
+
+
+    def _weighted_average(
+            self,
+            components: dict[str, float | None],
+    ) -> float:
+
+        """
+        Calculate a weighted average using only the available components.
+
+        Args:
+            components: A dict object containing the components as keys scores as values
+
+        Retursn:
+            Calculated weighted average.
+        """
+
+        weighted_sum = 0.0
+        active_weight = 0.0
+
+        for name, score in components.items():
+            if score is None:
+                continue
+
+            default_weight = self.weights(name)
+
+            weighted_sum += default_weight * score
+            active_weight += default_weight
+
+        if active_weight == 0.0:
+            return 0.0
+
+        return max(
+            0.0,
+            min(1.0, weighted_sum / active_weight)
+        )
+
 
 
     @staticmethod
