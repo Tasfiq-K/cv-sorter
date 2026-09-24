@@ -388,6 +388,8 @@ class PositionProfile(BaseModel):
 
     description: str
 
+    semantic_weight: float = Field(ge=0.0, le=1.0)
+
     evaluation_dimensions: list[EvaluationDimension] = Field(
         default_factory=list
     )
@@ -407,6 +409,7 @@ class ScoreBreakdown(BaseModel):
     project_score: float = 0.0
     certification_score: float = 0.0
     semantic_score: float = 0.0
+    explicit_score: float = 0.0
     final_score: float = 0.0
 
 
