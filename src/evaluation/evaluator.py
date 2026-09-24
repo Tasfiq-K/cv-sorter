@@ -425,12 +425,19 @@ class Evaluator:
             "certifications": certification_score,
         }
 
-        weighted_total = 0.0
+        explicit_score = 0.0
 
         for dimension, score in scores.items():
-            weighted_total += (
+            explicit_score += (
                 score * self._weights.get(dimension, 0.0)
             )
+
+        semantic_weight = self.position.semantic_weight
+
+        fianl_score = (
+            explicit_score * (1.0 - semantic_weight)
+            + semantic_score * semantic_weight
+        )
 
         # Dimensions not yet implemented:
         #
@@ -449,7 +456,7 @@ class Evaluator:
             project_score=project_score,
             certification_score=certification_score,
             semantic_score=semantic_score,
-            final_score=weighted_total,
+            final_score=fianl_score,
         )
 
     # ==========================================================
