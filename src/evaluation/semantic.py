@@ -68,31 +68,6 @@ class SemanticScorer:
         }
 
         return self._weighted_average(components) # calculation happens elsewhere
-
-        # candidate_text = self._build_candidate(candidate)
-        # job_text = self._build_job(job_description)
-
-        # if not candidate_text or not job_text:
-        #     return 0.0
-
-        # candidate_embedding = self.model.encode(
-        #     candidate_text,
-        #     convert_to_tensor=True,
-        #     normalize_embeddings=True,
-        # )
-
-        # job_embedding = self.model.encode(
-        #     job_text,
-        #     convert_to_tensor=True,
-        #     normalize_embeddings=True,
-        # )
-
-        # similarity = util.cos_sim(
-        #     candidate_embedding,
-        #     job_embedding
-        # ).item()
-
-        # return max(0.0, min(1.0, (similarity + 1.0) / 2.0))
     
 
     def _score_pair(
@@ -167,10 +142,10 @@ class SemanticScorer:
             min(1.0, weighted_sum / active_weight)
         )
 
-
+    # build candidate profile
 
     @staticmethod
-    def _build_candidate(
+    def _build_candidate_profile(
         candidate: CandidateProfile,
     ) -> str:
 
@@ -182,35 +157,13 @@ class SemanticScorer:
         if candidate.summary:
             parts.append(candidate.summary)
 
-        for skill in candidate.skills:
-            if skill.name:
-                parts.append(skill.name)
-
-        for experience in candidate.experience:
-            if experience.role:
-                parts.append(experience.role)
-
-            if experience.description:
-                parts.append(experience.description)
-
-            if experience.technologies:
-                parts.extend(experience.technologies)
-
-        for project in candidate.projects:
-            if project.title:
-                parts.append(project.title)
-
-            if project.description:
-                parts.append(project.description)
-
-            if project.technologies:
-                parts.extend(project.technologies)
 
         return " ".join(parts).strip()
 
 
+    # build job profile
     @staticmethod
-    def _build_job(
+    def _build_job_profile(
         job_description: JobDescription,
     ) -> str:
 
@@ -222,14 +175,82 @@ class SemanticScorer:
         if job_description.summary:
             parts.append(job_description.summary)
 
-        parts.extend(job_description.responsibilities)
+        return " ".join(parts).strip()
 
-        for skill in job_description.required_skills:
-            if skill.name:
-                parts.append(skill.name)
 
-        for skill in job_description.preferred_skills:
-            if skill.name:
-                parts.append(skill.name)
+    # build candidate experience
+    @staticmethod
+    def _build_candidate_experience(
+        candidate: CandidateProfile,
+    ) -> str:
+
+        parts: list[str] = []
+
+        for experience in candidate.experience:
+            if experience.role:
+                parts.append(experience.role)
+
+            if experience.description:
+                parts.append(experience.description)
+
+            if experience.technologies:
+                parts.append(experience.technologies)
+
+        return " ".join(parts).strip()
+
+
+    # build experience needed for the job
+    @staticmethod
+    def _build_job_experience(
+        job_description: JobDescription,
+    ) -> str:
+
+        parts: list[str] = []
+
+        # get the experience needed for the job
+        if job_description.experience:
+            parts.append(job_description.experience)
+
+        if job_description.summary:
+            parts.append(job_description.summary)
+
+        return " ".join(parts).strip()
+        
+
+    @staticmethod
+    def _build_candidate_projects(
+        candidate: CandidateProfile,
+    ) -> str:
+
+        parts: list[str] = []
+
+        for project in candidate.projects:
+            if project.title:
+                parts.append(project.title)
+
+            if project.description:
+                parts.append(project.description)
+
+            if project.technologies:
+                parts.append(project.technologies)
+
+        return " ".join(parts).strip()
+
+
+    @staticmethod
+    def _build_job_projects(
+        job_description: JobDescription,
+    ) -> str:
+
+        parts: list[str] = []
+
+        if job_description.summary:
+            parts.append(job_description.summary)
+
+        parts.extend(
+            responsibility
+            for responsibility in job_description.responsibilities
+            if responsibility
+        )
 
         return " ".join(parts).strip()
