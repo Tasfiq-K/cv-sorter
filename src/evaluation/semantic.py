@@ -29,6 +29,7 @@ class SemanticScorer:
         self.model = SentenceTransformer(model_name, device='cpu')
         self.weights = weights or self.DEFAULT_WEIGHTS.copy()
 
+        self._validate_weights()
     
     def score(
         self, 
@@ -68,6 +69,36 @@ class SemanticScorer:
         }
 
         return self._weighted_average(components) # calculation happens elsewhere
+    
+
+    def _validate_weights(self) -> None:
+        """
+        Validate semantic component weights
+        """
+
+        expected = {
+            "profile",
+            "experience",
+            "projects",
+            "context"
+        }
+
+
+        if set(self.weights) != expected:
+            raise ValueError(
+                "Semantic scorer weights must contain exactly: "
+                f"{', '.join(sorted(expected))}"
+            )
+
+        if any(weight < 0.0 for weight in self.weights.values()):
+            raise ValueError(
+                "Semantic scorer weights cannot be negative."
+            )
+
+        if sum(self.weights.values()) <= 0.0:
+            raise ValueError(
+                "At least one semantic scorer weight must be greater than 0."
+            )
     
 
     def _score_pair(
