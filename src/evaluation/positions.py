@@ -15,6 +15,7 @@ MACHINE_LEARNING_INTERN = PositionProfile(
         "relevant projects, learning potential, and education over "
         "professional experience."
     ),
+    semantic_weight=0.10,
     evaluation_dimensions=[
         EvaluationDimension(
             name="required_skills",
@@ -96,6 +97,7 @@ MACHINE_LEARNING_ENGINEER = PositionProfile(
         "Prioritizes professional experience, technical skills, "
         "projects, and technical depth."
     ),
+    semantic_weight=0.10,
     evaluation_dimensions=[
         EvaluationDimension(
             name="experience",
@@ -152,6 +154,7 @@ DATA_SCIENTIST = PositionProfile(
         "relevant experience, analytical and machine learning skills, "
         "projects, and technical depth."
     ),
+    semantic_weight=0.10,
     evaluation_dimensions=[
         EvaluationDimension(
             name="required_skills",
@@ -203,6 +206,7 @@ SOFTWARE_ENGINEER = PositionProfile(
         "Prioritizes software development experience, required "
         "technical skills, projects, and engineering depth."
     ),
+    semantic_weight=0.10,
     evaluation_dimensions=[
         EvaluationDimension(
             name="required_skills",
