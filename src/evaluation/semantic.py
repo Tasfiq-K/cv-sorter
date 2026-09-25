@@ -30,6 +30,7 @@ class SemanticScorer:
         self.weights = weights or self.DEFAULT_WEIGHTS.copy()
 
         self._validate_weights()
+        print("testing with broader context")
     
     def score(
         self, 
@@ -61,6 +62,8 @@ class SemanticScorer:
                 self._build_candidate_projects(candidate),
                 self._build_job_projects(job_description)
             ),
+
+            # broader context may not be required, let's see how it goes without it
 
             "context": self._score_pair(
                 self._build_candidate_context(candidate),
@@ -122,7 +125,7 @@ class SemanticScorer:
             return None
 
 
-        embeddings = self.model_encode(
+        embeddings = self.model.encode(
             [candidate_text, job_text],
             convert_to_tensor=True,
             normalize_embeddings=True,
@@ -135,7 +138,7 @@ class SemanticScorer:
             embeddings[1]
         ).item()
 
-        return (0.0, min(1.0, similarity))
+        return max(0.0, min(1.0, similarity))
 
 
     def _weighted_average(
@@ -160,7 +163,9 @@ class SemanticScorer:
             if score is None:
                 continue
 
-            default_weight = self.weights(name)
+            print(f"{name} score: {score}")
+
+            default_weight = self.weights[name]
 
             weighted_sum += default_weight * score
             active_weight += default_weight
@@ -239,8 +244,8 @@ class SemanticScorer:
         parts: list[str] = []
 
         # get the experience needed for the job
-        if job_description.experience:
-            parts.append(job_description.experience)
+        if job_description.experience.raw_requirement:
+            parts.append(job_description.experience.raw_requirement)
 
         if job_description.summary:
             parts.append(job_description.summary)
@@ -272,6 +277,61 @@ class SemanticScorer:
     def _build_job_projects(
         job_description: JobDescription,
     ) -> str:
+
+        parts: list[str] = []
+
+        if job_description.summary:
+            parts.append(job_description.summary)
+
+        parts.extend(
+            responsibility
+            for responsibility in job_description.responsibilities
+            if responsibility
+        )
+
+        return " ".join(parts).strip()
+
+    @staticmethod
+    def _build_candidate_context(
+        candidate: CandidateProfile,
+    ) -> str:
+        """
+        Build broader technical/work context from the candidate.
+
+        Skills are intentionally not included here because explicit
+        skill matching is handled separately by the evaluator.
+        """
+
+        parts: list[str] = []
+
+        for experience in candidate.experience:
+
+            if experience.description:
+                parts.append(experience.description)
+
+            if experience.technologies:
+                parts.extend(experience.technologies)
+
+        for project in candidate.projects:
+
+            if project.description:
+                parts.append(project.description)
+
+            if project.technologies:
+                parts.extend(project.technologies)
+
+        return " ".join(parts).strip()
+
+    @staticmethod
+    def _build_job_context(
+        job_description: JobDescription,
+    ) -> str:
+        """
+        Build broader technical/work context from the job.
+
+        Explicit skill names are intentionally not included because
+        skill matching is handled separately by the evaluator.
+        """
 
         parts: list[str] = []
 
