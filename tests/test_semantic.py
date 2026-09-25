@@ -189,7 +189,10 @@ def test_empty_candidate_returns_zero():
 if __name__ == "__main__":
     print("Starting...")
     test_related_candidate_scores_higher()
+    print("==" * 40)
     test_unrelated_candidate_can_be_scored()
+    print("==" * 40)
     test_empty_candidate_returns_zero()
+    print("==" * 40)
 
     print("All semantic scorer tests passed.")
