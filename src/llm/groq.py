@@ -68,6 +68,12 @@ class GroqLLM(BaseLLM):
             Validated instance of output_model.
         """
 
+        if prompt_name == "cv_parser":
+            document_type = 'resume'
+        elif prompt_name == "jd_parser":
+            document_type = 'job description'
+
+
         prompt = self.prompt_manager.render(
             prompt_name,
             resume_text=document.raw_text,
@@ -83,7 +89,7 @@ class GroqLLM(BaseLLM):
                     "role": "user",
                     "content": (
                         f"{prompt}\n\n"
-                        "Here is the resume to extract:\n\n"
+                        f"Here is the {document_type} to extract:\n\n"
                         f"{document.raw_text}"
                     ),
                 }
