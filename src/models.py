@@ -220,7 +220,7 @@ class CandidateProfile(BaseModel):
     headline: str | None
     summary: str | None
     technical_depth_summary: str | None
-    learning_potential_summary: str | None
+    # learning_potential_summary: str | None
 
     contact: ContactInfo
 
@@ -246,6 +246,8 @@ class CandidateProfileLLM(BaseModel):
     name: str | None
     headline: str | None
     summary: str | None
+    technical_depth_summary: str | None
+    # learning_potential_summary: str | None
 
     contact: ContactInfo
 
@@ -278,6 +280,7 @@ class JobDescription(BaseModel):
     seniority: str | None
 
     summary: str | None
+    technical_depth_requirements: str | None
 
     responsibilities: list[str]
 
@@ -312,6 +315,7 @@ class JobDescriptionLLM(BaseModel):
     seniority: str | None
 
     summary: str | None
+    technical_depth_requirements: str | None
 
     responsibilities: list[str]
 
