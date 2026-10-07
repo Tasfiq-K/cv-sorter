@@ -247,7 +247,7 @@ class CandidateProfileLLM(BaseModel):
     headline: str | None
     summary: str | None
     technical_depth_summary: str | None
-    # learning_potential_summary: str | None
+    learning_potential_summary: str | None
 
     contact: ContactInfo
 
