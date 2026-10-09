@@ -12,9 +12,9 @@ Use **only information explicitly stated or strongly supported by the job descri
 
 ## Output Requirements
 
-The output MUST follow the provided structured-output schema exactly.
+IMPORTANT: The output MUST follow the provided structured-output schema exactly as is. Use the description passed with every field in the schema and the following the provided rules and examples below.
 
-The actual JSON schema supplied by the application is authoritative for field names, types, required fields, and nested structures.
+<!-- The actual JSON schema supplied by the application is authoritative for field names, types, required fields, and nested structures. -->
 
 Do not add fields that are not present in the provided schema.
 
@@ -214,6 +214,7 @@ LangChain
 RAG
 Vector databases
 ```
+Assign the most appropriate category based on the skill's nature.
 
 when the job description clearly establishes these as expected capabilities.
 
@@ -287,13 +288,14 @@ For:
 
 > Freshers are welcome
 
-do not invent a numerical value.
+- NEVER return `experience` as an array.
+- do not invent a numerical value.
 
-Preserve the original requirement in `raw_requirement` and represent the requirement using the available schema fields without inventing years.
+- Preserve the original requirement in `raw_requirement` and represent the requirement using the available schema fields without inventing years.
 
-Do not calculate or infer experience requirements.
+= Do not calculate or infer experience requirements.
 
-If the experience requirement is explicitly preferred rather than required, set `required` accordingly.
+- If the experience requirement is explicitly preferred rather than required, set `required` accordingly.
 
 ---
 
@@ -360,7 +362,9 @@ Examples may include:
 * shift requirements
 * specific behavioral or organizational requirements
 
-Preserve whether each requirement is required or preferred when the source makes that distinction.
+Preserve whether each requirement is required or preferred when the source makes that distinction. 
+
+Make sure to set priority if it's prioritized. The levels are `High`, `Mid`, `Low`. Don't invent if no prioritization is mentioned and return None.
 
 Do not duplicate requirements already represented elsewhere unless necessary to preserve distinct information.
 
