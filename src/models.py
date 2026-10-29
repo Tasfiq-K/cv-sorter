@@ -308,27 +308,27 @@ class JobDescriptionLLM(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    title: str | None
-    company: str | None
-    location: str | None
-    employment_type: str | None
-    seniority: str | None
+    title: str | None = Field(description="The title of the position being advertised.")
+    company: str | None = Field(description="The company or organization offering the position.")
+    location: str | None = Field(description="The stated work location.")
+    employment_type: str | None = Field(description="The stated employment arrangement or type.")
+    seniority: str | None = Field(description="The stated seniority or career level.")
 
-    summary: str | None
-    technical_depth_requirements: str | None
+    summary: str | None = Field(description="A concise representation of the job description's stated purpose and overall role.")
+    technical_depth_requirements: str | None = Field(description="A concise summary of the **technical depth expected for the position**, based only on the job description.")
 
-    responsibilities: list[str]
+    responsibilities: list[str] = Field(description="Actual responsibilities and duties described in the job description.")
 
-    required_skills: list[SkillEntry]
-    preferred_skills: list[SkillEntry]
+    required_skills: list[SkillEntry] = Field(description="Skills that are described as Required, Mandatory, Necessary, Essential, Expected, Must-Have Or Clearly Required")
+    preferred_skills: list[SkillEntry] = Field(description="Skills that are described or mentioned as Preferred, desirable, A plus, Nice to Have, Bonus, Advantageous, Preferred Qulifications")
 
-    experience: ExperienceRequirement
+    experience: ExperienceRequirement = Field(description="Explicit professional experience requirements.")
 
-    education: list[EducationRequirement]
+    education: list[EducationRequirement] = Field(description="Explicit Educational Requirements")
 
-    certifications: list[RequirementEntry]
+    certifications: list[RequirementEntry] = Field(description="Explicitly stated certification requirements or preferences.")
 
-    other_requirements: list[RequirementEntry]
+    other_requirements: list[RequirementEntry] = Field(description="explicit requirements that do not belong naturally to skills, experience, education, or certifications.")
 
 # ============================================================================
 # Derived Features
