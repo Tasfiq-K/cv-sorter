@@ -72,7 +72,33 @@ class SemanticScorer:
         }
 
         return self._weighted_average(components) # calculation happens elsewhere
+
+
+    def score_technical_depth(
+            self,
+            candidate: CandidateProfile,
+            job_description: JobDescription,
+    ) -> float:
+        """
+        Compare the candidate's technical depth with the
+        technical depth expected by the job.
+
+        Returns:
+            Similarity score in the range [0, 1].
+            Returns 0.0 if either summary is unavailable.
+        """
+
+        candidate_text = (
+            candidate.technical_depth_summary or ""
+        ).strip()
     
+        job_text = (
+            job_description.technical_depth_requirements or ""
+        ).strip()
+
+        score = self._score_pair(candidate_text, job_text)
+
+        return score if score is not None else 0.0
 
     def _validate_weights(self) -> None:
         """
@@ -230,7 +256,7 @@ class SemanticScorer:
                 parts.append(experience.description)
 
             if experience.technologies:
-                parts.append(experience.technologies)
+                parts.extend(experience.technologies)
 
         return " ".join(parts).strip()
 
@@ -268,7 +294,7 @@ class SemanticScorer:
                 parts.append(project.description)
 
             if project.technologies:
-                parts.append(project.technologies)
+                parts.extend(project.technologies)
 
         return " ".join(parts).strip()
 
