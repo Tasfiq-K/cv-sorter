@@ -21,6 +21,8 @@ def make_candidate(
         name="Test Candidate",
         headline=headline,
         summary=summary,
+        technical_depth_summary=None,
+        learning_potential_summary=None,
         contact=ContactInfo(
             email=None,
             phone=None,
@@ -60,6 +62,7 @@ def make_job(
         employment_type=None,
         seniority=None,
         summary=summary,
+        technical_depth_requirements=None,
         responsibilities=responsibilities,
         required_skills=[
             {
@@ -186,13 +189,55 @@ def test_empty_candidate_returns_zero():
     assert score == 0.0
 
 
+def test_technical_depth_score():
+    candidate = make_candidate(
+        skills=["Python", "PyTorch"],
+        summary="Machine learning engineer.",
+    ).model_copy(
+        update={
+            "technical_depth_summary": (
+                "Developed and evaluated deep learning models, "
+                "performed data preprocessing, tuned hyperparameters, "
+                "and analyzed model performance."
+            ),
+
+            "learning_potential_summary": (
+                ""
+            ),
+        }
+    )
+
+    job = make_job(
+        title="Machine Learning Intern",
+        summary="Work on machine learning applications.",
+        responsibilities=["Develop and validate ML models."],
+        required_skills=["Python"],
+    ).model_copy(
+        update={
+            "technical_depth_requirements": (
+                "Develop, evaluate, and validate machine learning "
+                "models, understand model behavior, and analyze "
+                "performance."
+            )
+        }
+    )
+
+    # scorer = SemanticScorer()
+    score = scorer.score_technical_depth(candidate, job)
+
+    print(f"Technical depth score: {score:.4f}")
+    assert 0.0 <= score <= 1.0
+
+
 if __name__ == "__main__":
     print("Starting...")
-    test_related_candidate_scores_higher()
+    # test_related_candidate_scores_higher()
+    # print("==" * 40)
+    # test_unrelated_candidate_can_be_scored()
+    # print("==" * 40)
+    # test_empty_candidate_returns_zero()
     print("==" * 40)
-    test_unrelated_candidate_can_be_scored()
-    print("==" * 40)
-    test_empty_candidate_returns_zero()
+    test_technical_depth_score()
     print("==" * 40)
 
     print("All semantic scorer tests passed.")
