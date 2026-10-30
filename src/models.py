@@ -415,6 +415,7 @@ class ScoreBreakdown(BaseModel):
     project_score: float = 0.0
     certification_score: float = 0.0
     semantic_score: float = 0.0
+    technical_depth_score: float = 0.0
     explicit_score: float = 0.0
     final_score: float = 0.0
 
