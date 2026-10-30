@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Literal
 
 from pydantic import BaseModel, Field, ConfigDict
 
@@ -145,6 +145,41 @@ class SkillEntry(BaseModel):
     category: str | None 
 
 
+class SkillEvidence(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+
+    name: str
+    category: str | None
+    context: str | None = Field(
+        description="Relevant cv evidence supporting this skill."
+    )
+
+
+class SkillMatch(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+
+    required_skill: str
+    required_category: str | None
+    matched: bool
+    match_type: Literal[
+        "exact",
+        "alias",
+        "categorical",
+        "None",
+    ]
+
+    evidence: list[SkillEvidence]
+    rationals: str | None
+
+
+class SkillMatchResult(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    matches: list[SkillMatch]
+
+
 # ============================================================================
 # Languages
 # ============================================================================
@@ -257,6 +292,13 @@ class CandidateProfileLLM(BaseModel):
     projects: list[ProjectEntry]
     certifications: list[CertificationEntry]
     languages: list[LanguageEntry]
+
+
+class CandidateAnalysis(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    candidate: CandidateProfile
+    skill_matches: SkillMatchResult
 
 # ============================================================================
 # Parsed Job Description
