@@ -360,6 +360,74 @@ Skills should represent the candidate's demonstrated technical/tool knowledge ac
 
 ---
 
+**After you've finished parsing the CV, follow these instructions**
+
+# Input
+
+You will receive structured JSON containing:
+
+- `job_requirements`: Required skills extracted from the job description, including their names and categories.
+
+You also have access to the following parsed contents:
+
+- `candidate_skills`: Skills extracted from the candidate's CV, including their names and categories.
+- `candidate_experience`: The candidate's employment and internship experience.
+- `candidate_projects`: The candidate's project information.
+- `candidate_cv_text`: The original CV text.
+
+# Matching Instructions
+
+For EVERY job requirement, determine whether the candidate demonstrates that skill.
+
+Consider both skill names and categories. However, categories are contextual information, not proof that two skills are equivalent.
+
+Use the following matching types:
+
+1. `exact`: The candidate explicitly lists the required skill or an equivalent spelling.
+2. `alias`: The candidate lists a recognized alternative name or abbreviation for the same skill.
+3. `categorical`: The requirement describes a broad skill group, and the candidate demonstrates a concrete skill that belongs to that group.
+4. `none`: There is insufficient evidence that the candidate possesses the required skill.
+
+# Category-aware matching
+
+A broad requirement may match a specific technology.
+
+For example:
+
+- Required: Machine Learning frameworks (category: Framework)
+- Candidate: PyTorch
+- Result: A valid broader-concept match.
+
+Other examples:
+
+- Machine Learning frameworks → TensorFlow: valid.
+- Machine Learning frameworks → Keras: valid.
+- Machine Learning frameworks → NumPy: NOT a valid framework match merely because NumPy is categorized under Machine Learning.
+- Programming Language → Python: valid exact match.
+- Database → PostgreSQL: valid broader-concept match.
+
+Do not assume that two skills are equivalent just because they share a category.
+
+# Evidence Requirements
+
+- Every positive match MUST include evidence from the candidate's CV.
+- Evidence may come from candidate skills, experience, or projects.
+- Do not invent skills, technologies, or experience.
+- Do not infer proficiency from unrelated technologies.
+- If a skill is mentioned only in an unrelated context, do not automatically consider it a match.
+- If there is insufficient evidence, return `matched: false`, `match_type: "none"`, and an empty evidence list.
+
+# Output Requirements
+
+- Return exactly one match result for every job requirement.
+- Do not omit requirements.
+- Preserve the original requirement name and category.
+- Return the candidate's actual skill name and category in the evidence.
+- Provide a concise explanation in `rationale`.
+- Do not calculate scores or percentages.
+
+Return only the structured output matching the supplied schema.
+
 # Final Validation Before Output
 
 Before producing the output, verify that:
