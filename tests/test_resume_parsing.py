@@ -18,7 +18,7 @@ from src.parser import Parser
 
 load_dotenv()
 
-CV_PATH = Path("data/cvs")
+CV_PATH = Path("data/cvs/")
 
 
 # ---------------------------------------------------------------------------
