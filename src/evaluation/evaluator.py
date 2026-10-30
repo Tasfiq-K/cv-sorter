@@ -89,6 +89,11 @@ class Evaluator:
             job_description,
         )
 
+        technical_depth_score = self.semantic_scorer.score_technical_depth(
+            candidate,
+            job_description,
+        )
+
         # throw-away print statement
         print(f"Semantic Score: {semantic_score}")
 
@@ -100,6 +105,7 @@ class Evaluator:
             project_score=project_score,
             certification_score=certification_score,
             semantic_score=semantic_score,
+            technical_depth_score=technical_depth_score,
         )
 
         strengths = self._find_strengths(
@@ -414,6 +420,7 @@ class Evaluator:
         project_score: float,
         certification_score: float,
         semantic_score: float,
+        technical_depth_score: float,
     ) -> ScoreBreakdown:
 
         scores = {
@@ -423,6 +430,7 @@ class Evaluator:
             "education": education_score,
             "projects": project_score,
             "certifications": certification_score,
+            "technical_depth": technical_depth_score
         }
 
         explicit_score = 0.0
@@ -433,7 +441,6 @@ class Evaluator:
             )
 
         semantic_weight = self.position.semantic_weight
-
         fianl_score = (
             explicit_score * (1.0 - semantic_weight)
             + semantic_score * semantic_weight
@@ -456,6 +463,8 @@ class Evaluator:
             project_score=project_score,
             certification_score=certification_score,
             semantic_score=semantic_score,
+            technical_depth_score=technical_depth_score,
+            explicit_score=explicit_score,
             final_score=fianl_score,
         )
 
