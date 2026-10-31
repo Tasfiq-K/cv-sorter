@@ -20,7 +20,7 @@ Stay curious and proactive in exploring new technologies and methodologies in ma
 
 ### 🔑 What we’re looking for:
 Passionate about machine learning with a strong desire to learn and grow.
-Familiarity with programming languages such as Python and Machine Learning frameworks.
+Familiarity with programming languages such as Python and Machine Learning frameworks e.g, Pytorch, Tensorflow, Scikit-Learn etc.
 Excellent communication and teamwork skills.
 
 ### 💼 Why join us?
