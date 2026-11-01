@@ -34,11 +34,11 @@ MACHINE_LEARNING_INTERN = PositionProfile(
             ),
         ),
         EvaluationDimension(
-            name="learning_potential",
-            weight=0.15,
+            name="preferred_skills",
+            weight=0.10,
             description=(
-                "Evidence of curiosity, continuous learning, "
-                "self-development, experimentation, and growth."
+                "Match against the technical skills that are preferred but not mandatory "
+                "by the job description."
             ),
         ),
         EvaluationDimension(
@@ -48,18 +48,10 @@ MACHINE_LEARNING_INTERN = PositionProfile(
                 "Relevance of the candidate's educational background "
                 "to the position."
             ),
-        ),
-        EvaluationDimension(
-            name="communication_teamwork",
-            weight=0.10,
-            description=(
-                "Evidence of communication, collaboration, teamwork, "
-                "leadership, or related interpersonal abilities."
-            ),
-        ),
+        ), 
         EvaluationDimension(
             name="experience",
-            weight=0.05,
+            weight=0.10,
             description=(
                 "Relevant professional or internship experience. "
                 "Experience is intentionally given a low weight because "
@@ -76,7 +68,7 @@ MACHINE_LEARNING_INTERN = PositionProfile(
         ),
         EvaluationDimension(
             name="technical_depth",
-            weight=0.05,
+            weight=0.15,
             description=(
                 "Depth and breadth of the candidate's technical "
                 "knowledge beyond the explicitly required skills."
@@ -111,7 +103,7 @@ MACHINE_LEARNING_ENGINEER = PositionProfile(
         ),
         EvaluationDimension(
             name="technical_depth",
-            weight=0.15,
+            weight=0.20,
             description="Depth of machine learning and engineering knowledge.",
         ),
         EvaluationDimension(
@@ -130,14 +122,9 @@ MACHINE_LEARNING_ENGINEER = PositionProfile(
             description="Relevant professional certifications and courses.",
         ),
         EvaluationDimension(
-            name="communication_teamwork",
+            name="preferred_skills",
             weight=0.05,
-            description="Communication and collaboration ability.",
-        ),
-        EvaluationDimension(
-            name="learning_potential",
-            weight=0.05,
-            description="Evidence of continued technical growth.",
+            description="Match again good to have technical skills",
         ),
     ],
 )
