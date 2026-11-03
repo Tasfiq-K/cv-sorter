@@ -155,7 +155,7 @@ DATA_SCIENTIST = PositionProfile(
         ),
         EvaluationDimension(
             name="technical_depth",
-            weight=0.15,
+            weight=0.10,
             description="Depth in statistics, machine learning, and data analysis.",
         ),
         EvaluationDimension(
@@ -169,8 +169,8 @@ DATA_SCIENTIST = PositionProfile(
             description="Relevant academic background.",
         ),
         EvaluationDimension(
-            name="communication_teamwork",
-            weight=0.05,
+            name="preferred_skills",
+            weight=0.10,
             description="Communication and collaboration ability.",
         ),
         EvaluationDimension(
@@ -202,12 +202,12 @@ SOFTWARE_ENGINEER = PositionProfile(
         ),
         EvaluationDimension(
             name="experience",
-            weight=0.25,
+            weight=0.20,
             description="Relevant professional software engineering experience.",
         ),
         EvaluationDimension(
             name="technical_depth",
-            weight=0.15,
+            weight=0.20,
             description="Depth of software engineering knowledge.",
         ),
         EvaluationDimension(
@@ -221,7 +221,7 @@ SOFTWARE_ENGINEER = PositionProfile(
             description="Relevant educational background.",
         ),
         EvaluationDimension(
-            name="communication_teamwork",
+            name="preferred_skills",
             weight=0.05,
             description="Communication and collaboration ability.",
         ),
